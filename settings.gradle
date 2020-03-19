@@ -1,0 +1,2 @@
+rootProject.name='multi_reminder'
+include ':app'
