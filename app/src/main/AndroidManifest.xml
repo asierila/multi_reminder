@@ -9,13 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".custom"></activity>
-        <activity android:name=".exercise" />
-        <activity android:name=".cleaning" />
-        <activity android:name=".hands_daily" />
-        <activity android:name=".eat_daily" />
-        <activity android:name=".drink_daily" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".custom" android:label="Custom reminder" android:icon="@drawable/ic_settings_blackdp"/>
+        <activity android:name=".exercise" android:label="Workout" android:icon="@drawable/ic_workout"/>
+        <activity android:name=".cleaning" android:label="Clean" android:icon="@drawable/ic_clean"/>
+        <activity android:name=".hands_daily" android:label="Wash hands" android:icon="@drawable/ic_hand_wash"/>
+        <activity android:name=".eat_daily" android:label="Eat" android:icon="@drawable/ic_eat"/>
+        <activity android:name=".drink_daily" android:label="Drink Water" android:icon="@drawable/ic_water_glass"/>
+        <activity android:name=".MainActivity" android:label="Get your S#!T together">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -13,46 +13,47 @@
         android:orientation="vertical"
         android:padding="8dp"
         android:gravity="center_horizontal">
+
         <Button
             android:id="@+id/buttonDrink"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="86dp"
             android:drawableRight="@drawable/ic_water_glass"
-            android:text="Drink water"/>
+            android:text="Drink water" />
         <Button
             android:id="@+id/buttonEat"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="95dp"
             android:drawableRight="@drawable/ic_eat"
             android:text="Eat"/>
         <Button
             android:id="@+id/buttonWashHands"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="95dp"
             android:drawableRight="@drawable/ic_hand_wash"
             android:text="Wash hands"/>
         <Button
             android:id="@+id/buttonShower"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="95dp"
             android:drawableRight="@drawable/ic_shower"
             android:text="Shower"/>
         <Button
             android:id="@+id/buttonClean"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="95dp"
             android:drawableRight="@drawable/ic_clean"
             android:text="Clean"/>
         <Button
             android:id="@+id/buttonWorkout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="95dp"
             android:drawableRight="@drawable/ic_workout"
             android:text="Workout"/>
         <Button
             android:id="@+id/buttonCustom"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="95dp"
             android:drawableRight="@drawable/ic_settings_blackdp"
             android:text="Custom Reminder"/>
     </LinearLayout>
