@@ -9,13 +9,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".custom" android:label="Custom reminder" android:icon="@drawable/ic_settings_blackdp"/>
-        <activity android:name=".exercise" android:label="Workout" android:icon="@drawable/ic_workout"/>
-        <activity android:name=".cleaning" android:label="Clean" android:icon="@drawable/ic_clean"/>
-        <activity android:name=".hands_daily" android:label="Wash hands" android:icon="@drawable/ic_hand_wash"/>
-        <activity android:name=".eat_daily" android:label="Eat" android:icon="@drawable/ic_eat"/>
-        <activity android:name=".drink_daily" android:label="Drink Water" android:icon="@drawable/ic_water_glass"/>
-        <activity android:name=".MainActivity" android:label="Get your S#!T together">
+        <activity android:name=".shower"></activity>
+        <activity
+            android:name=".custom"
+            android:icon="@drawable/ic_settings_blackdp"
+            android:label="Custom reminder" />
+        <activity
+            android:name=".exercise"
+            android:icon="@drawable/ic_workout"
+            android:label="Workout" />
+        <activity
+            android:name=".cleaning"
+            android:icon="@drawable/ic_clean"
+            android:label="Clean" />
+        <activity
+            android:name=".hands_daily"
+            android:icon="@drawable/ic_hand_wash"
+            android:label="Wash hands" />
+        <activity
+            android:name=".eat_daily"
+            android:icon="@drawable/ic_eat"
+            android:label="Eat" />
+        <activity
+            android:name=".drink_daily"
+            android:icon="@drawable/ic_water_glass"
+            android:label="Drink Water" />
+        <activity
+            android:name=".MainActivity"
+            android:label="Get your S#!T together">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
