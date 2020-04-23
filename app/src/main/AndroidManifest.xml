@@ -9,29 +9,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".shower"></activity>
+        <activity android:name=".Shower"></activity>
         <activity
-            android:name=".custom"
+            android:name=".Custom"
             android:icon="@drawable/ic_settings_blackdp"
             android:label="Custom reminder" />
         <activity
-            android:name=".exercise"
+            android:name=".Exercise"
             android:icon="@drawable/ic_workout"
             android:label="Workout" />
         <activity
-            android:name=".cleaning"
+            android:name=".Cleaning"
             android:icon="@drawable/ic_clean"
             android:label="Clean" />
         <activity
-            android:name=".hands_daily"
+            android:name=".Hands_daily"
             android:icon="@drawable/ic_hand_wash"
             android:label="Wash hands" />
         <activity
-            android:name=".eat_daily"
+            android:name=".Eat_daily"
             android:icon="@drawable/ic_eat"
             android:label="Eat" />
         <activity
-            android:name=".drink_daily"
+            android:name=".Drink_daily"
             android:icon="@drawable/ic_water_glass"
             android:label="Drink Water" />
         <activity

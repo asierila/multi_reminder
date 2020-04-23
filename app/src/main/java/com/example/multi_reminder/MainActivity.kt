@@ -13,37 +13,37 @@ class MainActivity : AppCompatActivity() {
 
 
         buttonDrink.setOnClickListener{
-            val intent = Intent(applicationContext, drink_daily::class.java)
+            val intent = Intent(applicationContext, Drink_daily::class.java)
             startActivity(intent)
         }
 
         buttonEat.setOnClickListener{
-            val intent = Intent(applicationContext, eat_daily::class.java)
+            val intent = Intent(applicationContext, Eat_daily::class.java)
             startActivity(intent)
         }
 
         buttonWashHands.setOnClickListener{
-            val intent = Intent(applicationContext, hands_daily::class.java)
+            val intent = Intent(applicationContext, Hands_daily::class.java)
             startActivity(intent)
         }
 
         buttonShower.setOnClickListener{
-            val intent = Intent(applicationContext, shower::class.java)
+            val intent = Intent(applicationContext, Shower::class.java)
             startActivity(intent)
         }
 
         buttonClean.setOnClickListener{
-            val intent = Intent(applicationContext, cleaning::class.java)
+            val intent = Intent(applicationContext, Cleaning::class.java)
             startActivity(intent)
         }
 
         buttonWorkout.setOnClickListener{
-            val intent = Intent(applicationContext, exercise::class.java)
+            val intent = Intent(applicationContext, Exercise::class.java)
             startActivity(intent)
         }
 
         buttonCustom.setOnClickListener{
-            val intent = Intent(applicationContext, custom::class.java)
+            val intent = Intent(applicationContext, Custom::class.java)
             startActivity(intent)
         }
 
