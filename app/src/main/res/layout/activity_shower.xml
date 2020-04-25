@@ -8,11 +8,11 @@
 
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/timePickerShower"
         android:layout_width="349dp"
         android:layout_height="105dp"
         android:timePickerMode="spinner"
-        app:layout_constraintBottom_toTopOf="@+id/datePicker"
+        app:layout_constraintBottom_toTopOf="@+id/datePickerShower"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.059" />
 
     <DatePicker
-        android:id="@+id/datePicker"
+        android:id="@+id/datePickerShower"
         android:layout_width="347dp"
         android:layout_height="95dp"
         android:calendarViewShown="false"
@@ -28,7 +28,7 @@
         app:layout_constraintBottom_toTopOf="@+id/et_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerShower"
         app:layout_constraintVertical_bias="0.02" />
 
     <EditText
@@ -41,10 +41,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/datePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/datePickerShower" />
 
     <Button
-        android:id="@+id/time_create"
+        android:id="@+id/time_createShower"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="356dp"

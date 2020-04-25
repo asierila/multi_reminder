@@ -9,13 +9,42 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-import kotlinx.android.synthetic.main.activity_drink_daily.*
+//import kotlinx.android.synthetic.main.activity_cleaning.*
+//import kotlinx.android.synthetic.main.activity_drink_daily.*
+//import kotlinx.android.synthetic.main.activity_drink_daily.et_message
+//import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
+//import kotlinx.android.synthetic.main.activity_drink_daily.timePicker
+//import kotlinx.android.synthetic.main.activity_drink_daily.time_create
+import java.util.*
+
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Intent
+import androidx.room.Room
+import kotlinx.android.synthetic.main.activity_eat_daily.*
+import kotlinx.android.synthetic.main.activity_eat_daily.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 
 class Eat_daily : AppCompatActivity() {
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_eat_daily)
+
+
+
+
+
+
+
+
+///Aleksin alapuolella
+
+
 
         floatingSettings.setOnClickListener{
             val layoutInflater : LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -74,6 +103,21 @@ class Eat_daily : AppCompatActivity() {
 
 
         }
+    }
+
+    private fun setAlarm(time: Long, message: String) {
+
+        val intent = Intent(this, ReminderReceiver::class.java)
+        intent.putExtra("message", message)
+
+        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
+
+        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        manager.setExact(AlarmManager.RTC, time, pendingIntent)
+
+        runOnUiThread{toast("Reminder is created")}
+
+
     }
 
 

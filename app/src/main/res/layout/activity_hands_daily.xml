@@ -7,7 +7,7 @@
     tools:context=".Hands_daily">
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/timePickerHands"
         android:layout_width="251dp"
         android:layout_height="203dp"
         android:timePickerMode="spinner"
@@ -24,15 +24,15 @@
         android:ems="10"
         android:hint="Reminder"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/time_create"
+        app:layout_constraintBottom_toTopOf="@+id/time_createHands"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerHands"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/time_create"
+        android:id="@+id/time_createHands"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="260dp"

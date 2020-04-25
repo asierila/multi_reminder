@@ -7,7 +7,7 @@
     tools:context=".Eat_daily">
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/timePickerEat"
         android:layout_width="251dp"
         android:layout_height="203dp"
         android:timePickerMode="spinner"
@@ -24,14 +24,14 @@
         android:ems="10"
         android:hint="Reminder"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/time_create"
+        app:layout_constraintBottom_toTopOf="@+id/time_createEat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerEat"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/time_create"
+        android:id="@+id/time_createEat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="264dp"

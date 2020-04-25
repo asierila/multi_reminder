@@ -1,6 +1,9 @@
 package com.example.multi_reminder
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
@@ -9,7 +12,14 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.room.Room
 import kotlinx.android.synthetic.main.activity_drink_daily.*
+import kotlinx.android.synthetic.main.activity_drink_daily.et_message
+import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
+import kotlinx.android.synthetic.main.activity_exercise.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
+import java.util.*
 
 class Exercise : AppCompatActivity() {
 
@@ -17,6 +27,55 @@ class Exercise : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercise)
 
+
+
+        time_createEx.setOnClickListener {
+
+
+            val calendar = GregorianCalendar(
+                datePickerEx.year,
+                datePickerEx.month,
+                datePickerEx.dayOfMonth,
+                timePickerEx.currentHour,
+                timePickerEx.currentMinute
+
+            )
+
+
+            if ((et_message.text.toString() != "" ) && (calendar.timeInMillis > System.currentTimeMillis())){
+                toast("jee")
+                val reminder = Reminder(
+                    uid = null,
+                    time = calendar.timeInMillis,
+                    location = null,
+                    message = et_message.text.toString()
+                )
+
+                doAsync {
+
+                    val dp = Room.databaseBuilder(
+                        applicationContext,
+                        AppDatabase::class.java,
+                        "reminders"
+                    ).build()
+                    dp.reminderDao().insert(reminder)
+                    dp.close()
+
+                    setAlarm(reminder.time!!, reminder.message)
+
+                    finish()
+                }
+            }else{
+                toast("Wrong data")
+            }
+
+        }
+        
+        
+        
+        
+        
+        
         floatingSettings.setOnClickListener{
             val layoutInflater : LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
@@ -74,5 +133,18 @@ class Exercise : AppCompatActivity() {
 
 
         }
+    }
+
+    private fun setAlarm(time: Long, message: String) {
+        val intent = Intent(this, ReminderReceiver::class.java)
+        intent.putExtra("message", message)
+
+        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
+
+        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        manager.setExact(AlarmManager.RTC, time, pendingIntent)
+
+        runOnUiThread{toast("Reminder is created")}
+
     }
 }

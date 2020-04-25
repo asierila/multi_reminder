@@ -7,11 +7,11 @@
     tools:context=".Cleaning">
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/timePickerCleaning"
         android:layout_width="349dp"
         android:layout_height="105dp"
         android:timePickerMode="spinner"
-        app:layout_constraintBottom_toTopOf="@+id/datePicker"
+        app:layout_constraintBottom_toTopOf="@+id/datePickerCleaning"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.059" />
 
     <DatePicker
-        android:id="@+id/datePicker"
+        android:id="@+id/datePickerCleaning"
         android:layout_width="347dp"
         android:layout_height="95dp"
         android:calendarViewShown="false"
@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toTopOf="@+id/et_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerCleaning"
         app:layout_constraintVertical_bias="0.02" />
 
 
@@ -40,10 +40,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/datePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/datePickerCleaning" />
 
     <Button
-        android:id="@+id/time_create"
+        android:id="@+id/time_createCleaning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="356dp"
