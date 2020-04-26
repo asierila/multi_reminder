@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import kotlinx.android.synthetic.main.activity_exercise.view.*
 import kotlinx.android.synthetic.main.list_view_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +17,7 @@ class ReminderAdapter(context: Context, private val list: List<Reminder>): BaseA
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
         val row = inflater.inflate(R.layout.list_view_item, parent, false)
-        row.itemMessage.text = list[position].message
+        row.itemMessageEX.text = list[position].message
 
         if(list[position].time != null){
 
@@ -26,9 +27,9 @@ class ReminderAdapter(context: Context, private val list: List<Reminder>): BaseA
             val time = list[position].time
             val readableTime = sdf.format(time)
 
-            row.itemTrigger.text = readableTime
+            row.itemTriggerEX.text = readableTime
         } else {
-            row.itemTrigger.text="location"
+            row.itemTriggerEX.text="location"
         }
 
 

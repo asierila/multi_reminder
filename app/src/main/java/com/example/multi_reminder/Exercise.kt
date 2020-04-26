@@ -17,8 +17,11 @@ import kotlinx.android.synthetic.main.activity_drink_daily.*
 import kotlinx.android.synthetic.main.activity_drink_daily.et_message
 import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
 import kotlinx.android.synthetic.main.activity_exercise.*
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
+import java.text.SimpleDateFormat
 import java.util.*
 
 class Exercise : AppCompatActivity() {
@@ -26,6 +29,7 @@ class Exercise : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercise)
+
 
 
 
@@ -43,13 +47,21 @@ class Exercise : AppCompatActivity() {
 
 
             if ((et_message.text.toString() != "" ) && (calendar.timeInMillis > System.currentTimeMillis())){
-                toast("jee")
+
                 val reminder = Reminder(
                     uid = null,
                     time = calendar.timeInMillis,
                     location = null,
                     message = et_message.text.toString()
                 )
+
+                val sdf = SimpleDateFormat("HH:mm dd.MM.yyyy")
+                sdf.timeZone = TimeZone.getDefault()
+
+                itemMessageEX.text = reminder.message
+                val timeEX = sdf.format(reminder.time)
+                itemTriggerEX.text =  timeEX
+
 
                 doAsync {
 
@@ -60,6 +72,8 @@ class Exercise : AppCompatActivity() {
                     ).build()
                     dp.reminderDao().insert(reminder)
                     dp.close()
+
+
 
                     setAlarm(reminder.time!!, reminder.message)
 
@@ -146,5 +160,34 @@ class Exercise : AppCompatActivity() {
 
         runOnUiThread{toast("Reminder is created")}
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshList()
+    }
+
+
+
+    private fun refreshList() {
+        doAsync {
+
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "reminders")
+                .build()
+            val reminders = db.reminderDao().getReminders()
+            db.close()
+
+            uiThread {
+                if (reminders.isNotEmpty()) {
+                    val adapter = ReminderAdapter(applicationContext, reminders)
+                    list.adapter = adapter
+                } else {
+
+                    toast("No reminders yet")
+                }
+
+            }
+
+        }
     }
 }
