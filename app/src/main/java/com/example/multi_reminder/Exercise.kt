@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.activity_drink_daily.et_message
 import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
 import kotlinx.android.synthetic.main.activity_exercise.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.popup_deletereminders.*
+import kotlinx.android.synthetic.main.popup_deletereminders.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
@@ -54,21 +56,24 @@ class Exercise : AppCompatActivity() {
                     message = et_message.text.toString()
                 )
 
+                // Only place the reminder to the exercise screen
+
                 val sdf = SimpleDateFormat("HH:mm dd.MM.yyyy")
                 sdf.timeZone = TimeZone.getDefault()
 
                 itemMessageEX.text = reminder.message
                 val timeEX = sdf.format(reminder.time)
                 itemTriggerEX.text =  timeEX
-
+                //
+                //toast("reminder set")
 
                 doAsync {
-
                     val dp = Room.databaseBuilder(
                         applicationContext,
                         AppDatabase::class.java,
                         "reminders"
                     ).build()
+
                     dp.reminderDao().insert(reminder)
                     dp.close()
 
@@ -140,8 +145,20 @@ class Exercise : AppCompatActivity() {
 
                 val buttonYes = view3.findViewById<Button>(R.id.buttonChooseYes)
                 val buttonNo = view3.findViewById<Button>(R.id.buttonChooseNo)
+
+
+
                 buttonNo.setOnClickListener{popupWindow3.dismiss()}
+                buttonYes.setOnClickListener {
+                    itemMessageEX.text = null
+                    itemTriggerEX.text = null
+                    popupWindow3.dismiss()
+                    //pitäisi vielä poistaa databasesta jos se on edes siellä
+
+                }
             }
+
+
 
 
 
@@ -151,7 +168,6 @@ class Exercise : AppCompatActivity() {
     private fun setAlarm(time: Long, message: String) {
         val intent = Intent(this, ReminderReceiver::class.java)
         intent.putExtra("message", message)
-
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
 
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager

@@ -16,7 +16,7 @@ class ReminderAdapter(context: Context, private val list: List<Reminder>): BaseA
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
-        val row = inflater.inflate(R.layout.list_view_item, parent, false)
+        val row = inflater.inflate(R.layout.activity_exercise, parent, false)
         row.itemMessageEX.text = list[position].message
 
         if(list[position].time != null){
