@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -12,8 +11,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
-import kotlinx.android.synthetic.main.activity_drink_daily.*
 import kotlinx.android.synthetic.main.activity_drink_daily.et_message
 import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
 import kotlinx.android.synthetic.main.activity_exercise.*
