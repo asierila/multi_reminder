@@ -60,27 +60,9 @@ class Eat_daily : AppCompatActivity() {
                 height,
                 focusable
             )
-            val buttonBG = view.findViewById<Button>(R.id.buttonBackground)
             val buttonDR = view.findViewById<Button>(R.id.buttonDelete)
 
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
-
-            buttonBG.setOnClickListener{
-                popupWindow.dismiss()
-                val layoutInflater2 : LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val view2: View = layoutInflater2.inflate(R.layout.popup_background, null)
-                val width = LinearLayout.LayoutParams.WRAP_CONTENT
-                val height = LinearLayout.LayoutParams.WRAP_CONTENT
-                val focusable = true
-                val popupWindow2 = PopupWindow(view2,
-                    width,
-                    height,
-                    focusable)
-                popupWindow2.showAtLocation(view, Gravity.CENTER, 0, 0)
-
-                val buttonCancel = view2.findViewById<Button>(R.id.buttonCancelBackground)
-                buttonCancel.setOnClickListener{popupWindow2.dismiss()}
-            }
 
             buttonDR.setOnClickListener{
                 popupWindow.dismiss()

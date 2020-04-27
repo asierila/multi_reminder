@@ -58,7 +58,7 @@
             android:drawableRight="@drawable/ic_settings_blackdp"
             android:text="Custom Reminder"/>
 
-        //list view ei kuulu tänne lopullisessa versiossa
+        <!--list view doesn't belong here in the final version-->
 
         <ListView
             android:id="@+id/list"
