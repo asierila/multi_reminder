@@ -149,13 +149,9 @@ class Exercise : AppCompatActivity() {
                     itemTriggerEX.text = null
                     popupWindow3.dismiss()
                     //pitäisi vielä poistaa databasesta jos se on edes siellä
-                    //olli näin katsoisin että exercisessä mukaan näin voisi tehdä
-                    //kun sitten on muistutus tehty tavalla:
-                    // dp = Room.databaseBuilder(applicationContext, AppDatabase::class.java,"reminders".build()
-                    //dp.reminderDao().insert(reminder)
-                    //dp.close()
+
                     //niin poistaminen tapahtuu varmaan:
-                    //dp.reminderDao().delete(reminder) //reminder varmaan oma kaikilla tabeille?
+                    //dp.reminderDao().delete(reminder) //tän tabin remandereiden Uid pitäs vain kaivaa jotenkin
                     //dp.close()
                 }
             }
