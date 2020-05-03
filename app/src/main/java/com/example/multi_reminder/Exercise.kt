@@ -61,16 +61,13 @@ class Exercise : AppCompatActivity() {
                     message = et_message.text.toString()
                 )
 
-                // Only place the reminder to the exercise screen
-
                 val sdf = SimpleDateFormat("HH:mm dd.MM.yyyy")
                 sdf.timeZone = TimeZone.getDefault()
 
                 itemMessageEX.text = reminder.message
                 val timeEX = sdf.format(reminder.time)
                 itemTriggerEX.text =  timeEX
-                //
-                //toast("reminder set")
+
 
                 doAsync {
                     val dp = Room.databaseBuilder(
@@ -82,8 +79,6 @@ class Exercise : AppCompatActivity() {
                     dp.reminderDao().insert(reminder)
                     dp.close()
 
-
-
                     setAlarm(reminder.time!!, reminder.message)
 
                     finish()
@@ -93,8 +88,6 @@ class Exercise : AppCompatActivity() {
             }
 
         }
-
-
 
 
         floatingSettings.setOnClickListener {
@@ -287,106 +280,3 @@ class Exercise : AppCompatActivity() {
     }
 
 }
-
-
-    /*
-
-        To copy and paste to other reminder tabs
-
-
-        time_createMUUTA.setOnClickListener {
-
-        val calendar = GregorianCalendar(
-                        datePickerMUUTA.year,
-                        datePickerMUUTA.month,
-                        datePickerMUUTA.dayOfMonth,
-                        timePickerMUUTA.currentHour,
-                        timePickerMUUTA.currentMinute
-
-                    )
-            if ((et_message.text.toString() != "" ) && (calendar.timeInMillis > System.currentTimeMillis())){
-
-                val reminder = Reminder(
-                    uid = null,
-                    time = calendar.timeInMillis,
-                    location = null,
-                    message = et_message.text.toString()
-                )
-
-                // Only place the reminder to the exercise screen
-
-                val sdf = SimpleDateFormat("HH:mm dd.MM.yyyy")
-                sdf.timeZone = TimeZone.getDefault()
-
-                itemMessageMUUTA.text = reminder.message
-                val timeMUUTA = sdf.format(reminder.time)
-                itemTriggerMUUTA.text =  timeMUUTA
-
-
-                doAsync {
-                    val dp = Room.databaseBuilder(
-                        applicationContext,
-                        AppDatabase::class.java,
-                        "reminders"
-                    ).build()
-
-                    dp.reminderDao().insert(reminder)
-                    dp.close()
-
-
-
-                    setAlarm(reminder.time!!, reminder.message)
-
-                    finish()
-                }
-            }else{
-                toast("Wrong data")
-            }
-
-        }
-        }
-
-
-
-    private fun setAlarm(time: Long, message: String) {
-        val intent = Intent(this, ReminderReceiver::class.java)
-        intent.putExtra("message", message)
-        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
-
-        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        manager.setExact(AlarmManager.RTC, time, pendingIntent)
-
-        runOnUiThread{toast("Reminder is created")}
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        refreshList()
-    }
-
-
-
-    private fun refreshList() {
-        doAsync {
-
-            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "reminders")
-                .build()
-            val reminders = db.reminderDao().getReminders()
-            db.close()
-
-            uiThread {
-                if (reminders.isNotEmpty()) {
-                    val adapter = ReminderAdapter(applicationContext, reminders)
-                    list.adapter = adapter
-                } else {
-
-                    toast("No reminders yet")
-                }
-
-            }
-
-        }
-    }
-
-*/

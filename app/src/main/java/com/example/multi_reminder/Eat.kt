@@ -180,8 +180,6 @@ class Eat : AppCompatActivity() {
                     message = et_message.text.toString()
                 )
 
-                // Only place the reminder to the exercise screen
-
                 val sdf = SimpleDateFormat("HH:mm dd.MM.yyyy")
                 sdf.timeZone = TimeZone.getDefault()
 
