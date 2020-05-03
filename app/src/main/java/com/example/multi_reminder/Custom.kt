@@ -72,6 +72,7 @@ class Custom : AppCompatActivity() {
             //val buttonBG = view.findViewById<Button>(R.id.buttonPhoto)
             val buttonBG = view.findViewById<Button>(R.id.buttonBackground)
             val buttonDR = view.findViewById<Button>(R.id.buttonDelete)
+            val buttonDrink = view.findViewById<Button>(R.id.buttonDrink)
 
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
 
@@ -118,6 +119,28 @@ class Custom : AppCompatActivity() {
                     }
                     else{
                         openCamera()
+                    }
+                }
+
+                buttonGallery.setOnClickListener {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(android.Manifest.permission.CAMERA)
+                            == PackageManager.PERMISSION_DENIED ||
+                            checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED) {
+                            val permission = arrayOf(
+                                android.Manifest.permission.CAMERA,
+                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            )
+                            requestPermissions(permission, PERMISSION_CODE)
+                        }
+                        else {
+
+                            pickImageFromGallery()
+                        }
+                    }
+                    else{
+                        pickImageFromGallery()
                     }
                 }
                 //Old useless code above, would've appeared on all the reminder views.
@@ -169,13 +192,26 @@ class Custom : AppCompatActivity() {
     private fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New picturer")
-        values.put(MediaStore.Images.Media.DESCRIPTION, "From the camera")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the gamera")
         image_uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
 
 
+    }
+    private fun pickImageFromGallery() {
+        //Intent to pick image
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_PICK_CODE)
+    }
+
+    companion object {
+        //image pick code
+        private val IMAGE_PICK_CODE = 1000;
+        //Permission code
+        private val PERMISSION_CODE = 1001;
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) { super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -196,6 +232,10 @@ class Custom : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK){
             image_view_custom.setImageURI(image_uri)
         }
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE){
+            image_view_custom.setImageURI(data?.data)
+        }
     }
+
 
 }

@@ -41,14 +41,14 @@
             android:icon="@drawable/ic_water_glass"
             android:label="Drink Water" />
         <activity
-            android:name=".MainActivity"
-            android:label="Get your S#!T together">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        android:name=".MainActivity"
+        android:label="Get your S#!T together">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
     </application>
 
 </manifest>

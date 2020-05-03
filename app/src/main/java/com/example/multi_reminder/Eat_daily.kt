@@ -132,6 +132,28 @@ class Eat_daily : AppCompatActivity() {
                         openCamera()
                     }
                 }
+
+                buttonGallery.setOnClickListener {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(android.Manifest.permission.CAMERA)
+                            == PackageManager.PERMISSION_DENIED ||
+                            checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED) {
+                            val permission = arrayOf(
+                                android.Manifest.permission.CAMERA,
+                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            )
+                            requestPermissions(permission, PERMISSION_CODE)
+                        }
+                        else {
+
+                            pickImageFromGallery()
+                        }
+                    }
+                    else{
+                        pickImageFromGallery()
+                    }
+                }
                 //Old useless code above, would've appeared on all the reminder views.
 
 
@@ -189,6 +211,19 @@ class Eat_daily : AppCompatActivity() {
 
 
     }
+    private fun pickImageFromGallery() {
+        //Intent to pick image
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_PICK_CODE)
+    }
+
+    companion object {
+        //image pick code
+        private val IMAGE_PICK_CODE = 1000;
+        //Permission code
+        private val PERMISSION_CODE = 1001;
+    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) { super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode){
@@ -207,6 +242,9 @@ class Eat_daily : AppCompatActivity() {
 
         if (resultCode == Activity.RESULT_OK){
             image_view.setImageURI(image_uri)
+        }
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE){
+            image_view.setImageURI(data?.data)
         }
     }
 
