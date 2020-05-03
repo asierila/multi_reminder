@@ -29,15 +29,15 @@
             android:icon="@drawable/ic_clean"
             android:label="Clean" />
         <activity
-            android:name=".Hands_daily"
+            android:name=".Hands"
             android:icon="@drawable/ic_hand_wash"
             android:label="Wash hands" />
         <activity
-            android:name=".Eat_daily"
+            android:name=".Eat"
             android:icon="@drawable/ic_eat"
             android:label="Eat" />
         <activity
-            android:name=".Drink_daily"
+            android:name=".Drink"
             android:icon="@drawable/ic_water_glass"
             android:label="Drink Water" />
         <activity

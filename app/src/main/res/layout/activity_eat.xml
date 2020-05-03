@@ -4,18 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Eat_daily">
+    tools:context=".Eat">
 
     <TimePicker
         android:id="@+id/timePickerEat"
-        android:layout_width="251dp"
-        android:layout_height="203dp"
+        android:layout_width="349dp"
+        android:layout_height="105dp"
         android:timePickerMode="spinner"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/datePickerEat"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.059" />
+
+    <DatePicker
+        android:id="@+id/datePickerEat"
+        android:layout_width="347dp"
+        android:layout_height="95dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        app:layout_constraintBottom_toTopOf="@+id/et_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerEat"
+        app:layout_constraintVertical_bias="0.02" />
 
     <EditText
         android:id="@+id/et_message"
@@ -24,11 +37,9 @@
         android:ems="10"
         android:hint="Reminder"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/time_createEat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePickerEat"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/datePickerEat" />
 
     <Button
         android:id="@+id/time_createEat"

@@ -23,17 +23,17 @@ class MainActivity : AppCompatActivity() {
 
 
         buttonDrink.setOnClickListener{
-            val intent = Intent(applicationContext, Drink_daily::class.java)
+            val intent = Intent(applicationContext, Drink::class.java)
             startActivity(intent)
         }
 
         buttonEat.setOnClickListener{
-            val intent = Intent(applicationContext, Eat_daily::class.java)
+            val intent = Intent(applicationContext, Eat::class.java)
             startActivity(intent)
         }
 
         buttonWashHands.setOnClickListener{
-            val intent = Intent(applicationContext, Hands_daily::class.java)
+            val intent = Intent(applicationContext, Hands::class.java)
             startActivity(intent)
         }
 

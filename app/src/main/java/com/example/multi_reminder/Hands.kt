@@ -18,14 +18,17 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-import kotlinx.android.synthetic.main.activity_custom.*
-import kotlinx.android.synthetic.main.activity_drink_daily.*
-import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
-import kotlinx.android.synthetic.main.activity_eat_daily.*
-import kotlinx.android.synthetic.main.activity_hands_daily.*
+import androidx.room.Room
+import kotlinx.android.synthetic.main.activity_hands.floatingSettings
+import kotlinx.android.synthetic.main.activity_hands.*
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
+import java.text.SimpleDateFormat
+import java.util.*
 
-class Hands_daily : AppCompatActivity() {
+class Hands : AppCompatActivity() {
 
     private val PERMISSION_CODE = 1000;
     private val IMAGE_CAPTURE_CODE = 1001
@@ -35,7 +38,7 @@ class Hands_daily : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_hands_daily)
+        setContentView(R.layout.activity_hands)
 
 
         floatingSettings.setOnClickListener {
@@ -158,13 +161,65 @@ class Hands_daily : AppCompatActivity() {
 
 
         }
+
+        time_createHands.setOnClickListener {
+
+            val calendar = GregorianCalendar(
+                datePickerHands.year,
+                datePickerHands.month,
+                datePickerHands.dayOfMonth,
+                timePickerHands.currentHour,
+                timePickerHands.currentMinute
+
+            )
+
+            if ((et_message.text.toString() != "" ) && (calendar.timeInMillis > System.currentTimeMillis())){
+
+                val reminder = Reminder(
+                    uid = null,
+                    time = calendar.timeInMillis,
+                    location = null,
+                    message = et_message.text.toString()
+                )
+
+                // Only place the reminder to the exercise screen
+
+                val sdf = SimpleDateFormat("HH:mm dd.MM.yyyy")
+                sdf.timeZone = TimeZone.getDefault()
+
+                itemMessageHands.text = reminder.message
+                val timeHands = sdf.format(reminder.time)
+                itemTriggerHands.text =  timeHands
+
+
+                doAsync {
+                    val dp = Room.databaseBuilder(
+                        applicationContext,
+                        AppDatabase::class.java,
+                        "reminders"
+                    ).build()
+
+                    dp.reminderDao().insert(reminder)
+                    dp.close()
+
+
+
+                    setAlarm(reminder.time!!, reminder.message)
+
+                    finish()
+                }
+            }else{
+                toast("Wrong data")
+            }
+
+        }
     }
 
-    private fun setAlarm(time: Long, message: String) {
 
+
+    private fun setAlarm(time: Long, message: String) {
         val intent = Intent(this, ReminderReceiver::class.java)
         intent.putExtra("message", message)
-
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
 
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -172,8 +227,37 @@ class Hands_daily : AppCompatActivity() {
 
         runOnUiThread{toast("Reminder is created")}
 
-
     }
+
+    override fun onResume() {
+        super.onResume()
+        refreshList()
+    }
+
+
+
+    private fun refreshList() {
+        doAsync {
+
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "reminders")
+                .build()
+            val reminders = db.reminderDao().getReminders()
+            db.close()
+
+            uiThread {
+                if (reminders.isNotEmpty()) {
+                    val adapter = ReminderAdapter(applicationContext, reminders)
+                    list.adapter = adapter
+                } else {
+
+                    toast("No reminders yet")
+                }
+
+            }
+
+        }
+    }
+
 
     private fun openCamera() {
         val values = ContentValues()

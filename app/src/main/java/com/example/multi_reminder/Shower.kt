@@ -19,7 +19,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.room.Room
-import kotlinx.android.synthetic.main.activity_hands_daily.*
+import kotlinx.android.synthetic.main.activity_hands.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_shower.floatingSettings
 import kotlinx.android.synthetic.main.activity_shower.*

@@ -7,7 +7,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,12 +18,16 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_drink_daily.*
-import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
-import kotlinx.android.synthetic.main.activity_eat_daily.*
+import androidx.room.Room
+import kotlinx.android.synthetic.main.activity_drink.*
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
+import java.text.SimpleDateFormat
+import java.util.*
 
-class Drink_daily : AppCompatActivity() {
+class Drink : AppCompatActivity() {
 
     private val PERMISSION_CODE = 1000;
     private val IMAGE_CAPTURE_CODE = 1001
@@ -33,7 +36,7 @@ class Drink_daily : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_drink_daily)
+        setContentView(R.layout.activity_drink)
 
         floatingSettings.setOnClickListener {
             val layoutInflater: LayoutInflater =
@@ -153,7 +156,102 @@ class Drink_daily : AppCompatActivity() {
 
 
         }
+
+        time_createDrink.setOnClickListener {
+
+            val calendar = GregorianCalendar(
+                datePickerDrink.year,
+                datePickerDrink.month,
+                datePickerDrink.dayOfMonth,
+                timePickerDrink.currentHour,
+                timePickerDrink.currentMinute
+
+            )
+            if ((et_message.text.toString() != "" ) && (calendar.timeInMillis > System.currentTimeMillis())){
+
+                val reminder = Reminder(
+                    uid = null,
+                    time = calendar.timeInMillis,
+                    location = null,
+                    message = et_message.text.toString()
+                )
+
+                // Only place the reminder to the exercise screen
+
+                val sdf = SimpleDateFormat("HH:mm dd.MM.yyyy")
+                sdf.timeZone = TimeZone.getDefault()
+
+                itemMessageDrink.text = reminder.message
+                val timeDrink = sdf.format(reminder.time)
+                itemTriggerDrink.text =  timeDrink
+
+
+                doAsync {
+                    val dp = Room.databaseBuilder(
+                        applicationContext,
+                        AppDatabase::class.java,
+                        "reminders"
+                    ).build()
+
+                    dp.reminderDao().insert(reminder)
+                    dp.close()
+
+
+
+                    setAlarm(reminder.time!!, reminder.message)
+
+                    finish()
+                }
+            }else{
+                toast("Wrong data")
+            }
+
+        }
     }
+
+
+
+    private fun setAlarm(time: Long, message: String) {
+        val intent = Intent(this, ReminderReceiver::class.java)
+        intent.putExtra("message", message)
+        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
+
+        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        manager.setExact(AlarmManager.RTC, time, pendingIntent)
+
+        runOnUiThread{toast("Reminder is created")}
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshList()
+    }
+
+
+
+    private fun refreshList() {
+        doAsync {
+
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "reminders")
+                .build()
+            val reminders = db.reminderDao().getReminders()
+            db.close()
+
+            uiThread {
+                if (reminders.isNotEmpty()) {
+                    val adapter = ReminderAdapter(applicationContext, reminders)
+                    list.adapter = adapter
+                } else {
+
+                    toast("No reminders yet")
+                }
+
+            }
+
+        }
+    }
+
 
 
 
@@ -238,7 +336,7 @@ class Drink_daily : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_drink_daily)
+        setContentView(R.layout.activity_drink)
 
 
 
