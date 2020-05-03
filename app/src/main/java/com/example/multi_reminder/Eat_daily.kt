@@ -10,12 +10,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-//import kotlinx.android.synthetic.main.activity_cleaning.*
-//import kotlinx.android.synthetic.main.activity_drink_daily.*
-//import kotlinx.android.synthetic.main.activity_drink_daily.et_message
-//import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
-//import kotlinx.android.synthetic.main.activity_drink_daily.timePicker
-//import kotlinx.android.synthetic.main.activity_drink_daily.time_create
 import java.util.*
 
 import android.app.AlarmManager
@@ -27,7 +21,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.room.Room
-import kotlinx.android.synthetic.main.activity_drink_daily.*
 import kotlinx.android.synthetic.main.activity_eat_daily.*
 import kotlinx.android.synthetic.main.activity_eat_daily.*
 import kotlinx.android.synthetic.main.activity_eat_daily.floatingSettings
@@ -47,17 +40,6 @@ class Eat_daily : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_eat_daily)
 
-
-
-
-
-
-
-
-///Aleksin alapuolella
-
-
-
         floatingSettings.setOnClickListener {
             val layoutInflater: LayoutInflater =
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -75,20 +57,11 @@ class Eat_daily : AppCompatActivity() {
                 focusable
             )
 
-            //Ollin alempi
-
-
-
-
-            //val buttonBG = view.findViewById<Button>(R.id.buttonPhoto)
             val buttonBG = view.findViewById<Button>(R.id.buttonBackground)
             val buttonDR = view.findViewById<Button>(R.id.buttonDelete)
-            val buttonDrink = view.findViewById<Button>(R.id.buttonDrink)
 
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
 
-
-            //below code is from when trying to make a now scrapped feature with camera
             buttonBG.setOnClickListener {
                 popupWindow.dismiss()
                 val layoutInflater2: LayoutInflater =
@@ -154,8 +127,6 @@ class Eat_daily : AppCompatActivity() {
                         pickImageFromGallery()
                     }
                 }
-                //Old useless code above, would've appeared on all the reminder views.
-
 
                 buttonDR.setOnClickListener {
                     popupWindow.dismiss()
@@ -176,6 +147,11 @@ class Eat_daily : AppCompatActivity() {
                     val buttonYes = view3.findViewById<Button>(R.id.buttonChooseYes)
                     val buttonNo = view3.findViewById<Button>(R.id.buttonChooseNo)
                     buttonNo.setOnClickListener { popupWindow3.dismiss() }
+                    buttonYes.setOnClickListener {
+                        itemMessageEat.text = null
+                        itemTriggerEat.text = null
+                        popupWindow3.dismiss()
+                    }
                 }
 
 

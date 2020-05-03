@@ -18,11 +18,15 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.room.Room
 import kotlinx.android.synthetic.main.activity_custom.*
-import kotlinx.android.synthetic.main.activity_drink_daily.*
-import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
-import kotlinx.android.synthetic.main.activity_eat_daily.*
+import kotlinx.android.synthetic.main.activity_custom.floatingSettings
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Custom : AppCompatActivity() {
 
@@ -35,16 +39,6 @@ class Custom : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom)
-
-
-
-
-
-
-
-
-///Aleksin alapuolella
-
 
 
         floatingSettings.setOnClickListener {
@@ -64,20 +58,13 @@ class Custom : AppCompatActivity() {
                 focusable
             )
 
-            //Ollin alempi
 
-
-
-
-            //val buttonBG = view.findViewById<Button>(R.id.buttonPhoto)
             val buttonBG = view.findViewById<Button>(R.id.buttonBackground)
             val buttonDR = view.findViewById<Button>(R.id.buttonDelete)
-            val buttonDrink = view.findViewById<Button>(R.id.buttonDrink)
 
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
 
 
-            //below code is from when trying to make a now scrapped feature with camera
             buttonBG.setOnClickListener {
                 popupWindow.dismiss()
                 val layoutInflater2: LayoutInflater =
@@ -143,8 +130,6 @@ class Custom : AppCompatActivity() {
                         pickImageFromGallery()
                     }
                 }
-                //Old useless code above, would've appeared on all the reminder views.
-
 
                 buttonDR.setOnClickListener {
                     popupWindow.dismiss()
@@ -165,6 +150,11 @@ class Custom : AppCompatActivity() {
                     val buttonYes = view3.findViewById<Button>(R.id.buttonChooseYes)
                     val buttonNo = view3.findViewById<Button>(R.id.buttonChooseNo)
                     buttonNo.setOnClickListener { popupWindow3.dismiss() }
+                    buttonYes.setOnClickListener {
+                        itemMessageCustom.text = null
+                        itemTriggerCustom.text = null
+                        popupWindow3.dismiss()
+                    }
                 }
 
 
@@ -172,13 +162,66 @@ class Custom : AppCompatActivity() {
 
 
         }
+
+        time_createCustom.setOnClickListener {
+
+
+            val calendar = GregorianCalendar(
+                datePickerCustom.year,
+                datePickerCustom.month,
+                datePickerCustom.dayOfMonth,
+                timePickerCustom.currentHour,
+                timePickerCustom.currentMinute
+
+            )
+
+
+            if ((et_message.text.toString() != "" ) && (calendar.timeInMillis > System.currentTimeMillis())){
+
+                val reminder = Reminder(
+                    uid = null,
+                    time = calendar.timeInMillis,
+                    location = null,
+                    message = et_message.text.toString()
+                )
+
+
+                val sdf = SimpleDateFormat("HH:mm dd.MM.yyyy")
+                sdf.timeZone = TimeZone.getDefault()
+
+                itemMessageCustom.text = reminder.message
+                val timeCustom = sdf.format(reminder.time)
+                itemTriggerCustom.text =  timeCustom
+
+
+                doAsync {
+                    val dp = Room.databaseBuilder(
+                        applicationContext,
+                        AppDatabase::class.java,
+                        "reminders"
+                    ).build()
+
+                    dp.reminderDao().insert(reminder)
+                    dp.close()
+
+
+
+                    setAlarm(reminder.time!!, reminder.message)
+
+                    finish()
+                }
+            }else{
+                toast("Wrong data")
+            }
+
+        }
     }
 
-    private fun setAlarm(time: Long, message: String) {
 
+
+    private fun setAlarm(time: Long, message: String) {
         val intent = Intent(this, ReminderReceiver::class.java)
         intent.putExtra("message", message)
-
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
 
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -186,7 +229,35 @@ class Custom : AppCompatActivity() {
 
         runOnUiThread{toast("Reminder is created")}
 
+    }
 
+    override fun onResume() {
+        super.onResume()
+        refreshList()
+    }
+
+
+
+    private fun refreshList() {
+        doAsync {
+
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "reminders")
+                .build()
+            val reminders = db.reminderDao().getReminders()
+            db.close()
+
+            uiThread {
+                if (reminders.isNotEmpty()) {
+                    val adapter = ReminderAdapter(applicationContext, reminders)
+                    list.adapter = adapter
+                } else {
+
+                    toast("No reminders yet")
+                }
+
+            }
+
+        }
     }
 
     private fun openCamera() {

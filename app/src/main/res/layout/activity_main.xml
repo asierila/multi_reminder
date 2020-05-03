@@ -66,8 +66,6 @@
             android:drawableRight="@drawable/ic_settings_blackdp"
             android:text="Custom Reminder"/>
 
-        <!--list view doesn't belong here in the final version-->
-
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"

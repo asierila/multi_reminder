@@ -35,10 +35,6 @@ class Drink_daily : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_drink_daily)
 
-
-///Aleksin alapuolella
-
-
         floatingSettings.setOnClickListener {
             val layoutInflater: LayoutInflater =
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -56,18 +52,12 @@ class Drink_daily : AppCompatActivity() {
                 focusable
             )
 
-            //Ollin alempi
 
-
-            //val buttonBG = view.findViewById<Button>(R.id.buttonPhoto)
             val buttonBG = view.findViewById<Button>(R.id.buttonBackground)
             val buttonDR = view.findViewById<Button>(R.id.buttonDelete)
-            val buttonDrink = view.findViewById<Button>(R.id.buttonDrink)
 
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
 
-
-            //below code is from when trying to make a now scrapped feature with camera
             buttonBG.setOnClickListener {
                 popupWindow.dismiss()
                 val layoutInflater2: LayoutInflater =
@@ -131,8 +121,6 @@ class Drink_daily : AppCompatActivity() {
                         pickImageFromGallery()
                     }
                 }
-                //Old useless code above, would've appeared on all the reminder views.
-
 
                 buttonDR.setOnClickListener {
                     popupWindow.dismiss()
@@ -153,6 +141,11 @@ class Drink_daily : AppCompatActivity() {
                     val buttonYes = view3.findViewById<Button>(R.id.buttonChooseYes)
                     val buttonNo = view3.findViewById<Button>(R.id.buttonChooseNo)
                     buttonNo.setOnClickListener { popupWindow3.dismiss() }
+                    buttonYes.setOnClickListener {
+                        itemMessageDrink.text = null
+                        itemTriggerDrink.text = null
+                        popupWindow3.dismiss()
+                    }
                 }
 
 
@@ -162,20 +155,7 @@ class Drink_daily : AppCompatActivity() {
         }
     }
 
-    private fun setAlarm(time: Long, message: String) {
 
-        val intent = Intent(this, ReminderReceiver::class.java)
-        intent.putExtra("message", message)
-
-        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
-
-        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        manager.setExact(AlarmManager.RTC, time, pendingIntent)
-
-        runOnUiThread { toast("Reminder is created") }
-
-
-    }
 
     private fun openCamera() {
         val values = ContentValues()

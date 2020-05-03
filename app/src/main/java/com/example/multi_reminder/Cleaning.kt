@@ -7,6 +7,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.util.GregorianCalendar
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +19,16 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.room.Room
 import kotlinx.android.synthetic.main.activity_cleaning.*
-import kotlinx.android.synthetic.main.activity_custom.*
-import kotlinx.android.synthetic.main.activity_drink_daily.*
-import kotlinx.android.synthetic.main.activity_drink_daily.floatingSettings
-import kotlinx.android.synthetic.main.activity_eat_daily.*
+import kotlinx.android.synthetic.main.activity_cleaning.floatingSettings
+
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Cleaning : AppCompatActivity() {
 
@@ -36,17 +41,6 @@ class Cleaning : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cleaning)
-
-
-
-
-
-
-
-
-///Aleksin alapuolella
-
-
 
         floatingSettings.setOnClickListener {
             val layoutInflater: LayoutInflater =
@@ -65,20 +59,12 @@ class Cleaning : AppCompatActivity() {
                 focusable
             )
 
-            //Ollin alempi
 
-
-
-
-            //val buttonBG = view.findViewById<Button>(R.id.buttonPhoto)
             val buttonBG = view.findViewById<Button>(R.id.buttonBackground)
             val buttonDR = view.findViewById<Button>(R.id.buttonDelete)
-            val buttonDrink = view.findViewById<Button>(R.id.buttonDrink)
 
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
 
-
-            //below code is from when trying to make a now scrapped feature with camera
             buttonBG.setOnClickListener {
                 popupWindow.dismiss()
                 val layoutInflater2: LayoutInflater =
@@ -122,6 +108,31 @@ class Cleaning : AppCompatActivity() {
                         openCamera()
                     }
                 }
+                buttonDR.setOnClickListener {
+                    popupWindow.dismiss()
+                    val layoutInflater3: LayoutInflater =
+                        getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val view3: View = layoutInflater3.inflate(R.layout.popup_deletereminders, null)
+                    val width = LinearLayout.LayoutParams.WRAP_CONTENT
+                    val height = LinearLayout.LayoutParams.WRAP_CONTENT
+                    val focusable = true
+                    val popupWindow3 = PopupWindow(
+                        view3,
+                        width,
+                        height,
+                        focusable
+                    )
+                    popupWindow3.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+                    val buttonYes = view3.findViewById<Button>(R.id.buttonChooseYes)
+                    val buttonNo = view3.findViewById<Button>(R.id.buttonChooseNo)
+                    buttonNo.setOnClickListener { popupWindow3.dismiss() }
+                    buttonYes.setOnClickListener {
+                        itemMessageCleaning.text = null
+                        itemTriggerCleaning.text = null
+                        popupWindow3.dismiss()
+                    }
+                }
 
                 buttonGallery.setOnClickListener {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -144,42 +155,64 @@ class Cleaning : AppCompatActivity() {
                         pickImageFromGallery()
                     }
                 }
-                //Old useless code above, would've appeared on all the reminder views.
-
-
-                buttonDR.setOnClickListener {
-                    popupWindow.dismiss()
-                    val layoutInflater3: LayoutInflater =
-                        getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                    val view3: View = layoutInflater3.inflate(R.layout.popup_deletereminders, null)
-                    val width = LinearLayout.LayoutParams.WRAP_CONTENT
-                    val height = LinearLayout.LayoutParams.WRAP_CONTENT
-                    val focusable = true
-                    val popupWindow3 = PopupWindow(
-                        view3,
-                        width,
-                        height,
-                        focusable
-                    )
-                    popupWindow3.showAtLocation(view, Gravity.CENTER, 0, 0)
-
-                    val buttonYes = view3.findViewById<Button>(R.id.buttonChooseYes)
-                    val buttonNo = view3.findViewById<Button>(R.id.buttonChooseNo)
-                    buttonNo.setOnClickListener { popupWindow3.dismiss() }
-                }
-
-
             }
+        }
 
+        time_createCleaning.setOnClickListener {
+
+
+            val calendar = GregorianCalendar(
+                datePickerCleaning.year,
+                datePickerCleaning.month,
+                datePickerCleaning.dayOfMonth,
+                timePickerCleaning.currentHour,
+                timePickerCleaning.currentMinute
+
+            )
+
+
+            if ((et_message.text.toString() != "" ) && (calendar.timeInMillis > System.currentTimeMillis())){
+
+                val reminder = Reminder(
+                    uid = null,
+                    time = calendar.timeInMillis,
+                    location = null,
+                    message = et_message.text.toString()
+                )
+
+
+                val sdf = SimpleDateFormat("HH:mm dd.MM.yyyy")
+                sdf.timeZone = TimeZone.getDefault()
+
+                itemMessageCleaning.text = reminder.message
+                val timeCleaning = sdf.format(reminder.time)
+                itemTriggerCleaning.text =  timeCleaning
+
+
+                doAsync {
+                    val dp = Room.databaseBuilder(
+                        applicationContext,
+                        AppDatabase::class.java,
+                        "reminders"
+                    ).build()
+
+                    dp.reminderDao().insert(reminder)
+                    dp.close()
+
+                    setAlarm(reminder.time!!, reminder.message)
+
+                    finish()
+                }
+            }else{
+                toast("Wrong data")
+            }
 
         }
     }
 
     private fun setAlarm(time: Long, message: String) {
-
         val intent = Intent(this, ReminderReceiver::class.java)
         intent.putExtra("message", message)
-
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
 
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -187,8 +220,38 @@ class Cleaning : AppCompatActivity() {
 
         runOnUiThread{toast("Reminder is created")}
 
-
     }
+
+    override fun onResume() {
+        super.onResume()
+        refreshList()
+    }
+
+
+
+    private fun refreshList() {
+        doAsync {
+
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "reminders")
+                .build()
+            val reminders = db.reminderDao().getReminders()
+            db.close()
+
+            uiThread {
+                if (reminders.isNotEmpty()) {
+                    val adapter = ReminderAdapter(applicationContext, reminders)
+                    list.adapter = adapter
+                } else {
+
+                    toast("No reminders yet")
+                }
+
+            }
+
+        }
+    }
+
+
 
     private fun openCamera() {
         val values = ContentValues()
